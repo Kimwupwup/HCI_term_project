@@ -9,31 +9,78 @@ public class MenuButton : MonoBehaviour
     private GameObject menuPanel;
     private GameObject codePanel;
 
-    private bool isSet = false;
-    private bool isUnset = false;
+    private bool isSetMenu = false;
+    private bool isSetCodePanel = false;
+    private bool isSetViewPanel = false;
 
     void Start() {
         menuPanel = GameObject.FindGameObjectWithTag("menuPanel");
         codePanel = GameObject.FindGameObjectWithTag("codePanel");
     }
     void Update() {
-        if (isSet == true) {
+
+        // 메뉴창 켜기
+        if (isSetMenu == true) {
             menuPanel.transform.position = Vector2.Lerp(menuPanel.transform.position, new Vector2(270, menuPanel.transform.position.y), Time.deltaTime * speed);
+        }
+
+        // 메뉴창 끄기
+        if (isSetMenu == false) {
+            menuPanel.transform.position = Vector2.Lerp(menuPanel.transform.position, new Vector2(-280, menuPanel.transform.position.y), Time.deltaTime * speed);
+        }
+
+        // 코드창 키우기
+        if (isSetCodePanel == true) {
             codePanel.transform.position = Vector3.Lerp(codePanel.transform.position, new Vector2(codePanel.transform.position.x, 600), Time.deltaTime * speed);
         }
-        if (isUnset == true) {
-            menuPanel.transform.position = Vector2.Lerp(menuPanel.transform.position, new Vector2(-280, menuPanel.transform.position.y), Time.deltaTime * speed);
+
+        // 초기 상태
+        if (isSetCodePanel == false && isSetViewPanel == false) {
             codePanel.transform.position = Vector3.Lerp(codePanel.transform.position, new Vector2(codePanel.transform.position.x, 0), Time.deltaTime * speed);
+        }
+
+        // 뷰창 키우기
+        if (isSetViewPanel == true) {
+            codePanel.transform.position = Vector3.Lerp(codePanel.transform.position, new Vector2(codePanel.transform.position.x, -600), Time.deltaTime * speed);
         }
     }
 
-    public void BtnMenuOnClick() {
-        isSet = true;
-        isUnset = false;
+    public void TurnOnMenu() {
+
+        // 메뉴창, 코드창 키우기(뷰창 줄이기)
+        isSetMenu = true;
+        isSetCodePanel = true;
+        isSetViewPanel = false;
     }
 
-    public void OtherOnClick() {
-        isUnset = true;
-        isSet = false;
+    public void TurnOffMenu() {
+
+        // 이미 메뉴창이 꺼져있을 경우
+        if (isSetMenu == false) {
+            
+            // 뷰창 키우기(코드창 줄이기)
+            if (isSetViewPanel == false) {
+                isSetViewPanel = true;
+                isSetCodePanel = false;
+            } else {    // 원래 상태로
+                isSetViewPanel = false;
+                isSetCodePanel = false;
+            }
+        } else {    // 원래 상태로 (메뉴창 끄기)
+            isSetMenu = false;
+            isSetCodePanel = false;
+        }
+    }
+
+    public void SizeUpDownCodePanel() {
+
+        // 코드창 키우기(뷰창 줄이기)
+        if (isSetCodePanel == false) {
+            isSetCodePanel = true;
+            isSetViewPanel = false;
+        } else {    // 원래 상태로
+            isSetCodePanel = false;
+            isSetViewPanel = false;
+        }
     }
 }
