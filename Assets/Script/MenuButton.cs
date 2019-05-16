@@ -6,32 +6,45 @@ public class MenuButton : MonoBehaviour
 {
     
     public float speed = 1;
+
     private GameObject menuPanel;
     private GameObject codePanel;
+    private GameObject messageBox;
+
+    private float menuPanelWidth;
+    private float codePanelHeight;
 
     private bool isSetMenu = false;
     private bool isSetCodePanel = false;
     private bool isSetViewPanel = false;
 
+    void Awake() {
+        messageBox = GameObject.FindGameObjectWithTag("messageBox");
+        messageBox.SetActive(false);
+    }
+
     void Start() {
         menuPanel = GameObject.FindGameObjectWithTag("menuPanel");
         codePanel = GameObject.FindGameObjectWithTag("codePanel");
+
+        menuPanelWidth = menuPanel.GetComponent<RectTransform>().sizeDelta.x;
+        codePanelHeight = codePanel.GetComponent<RectTransform>().sizeDelta.y;
     }
     void Update() {
 
         // 메뉴창 켜기
         if (isSetMenu == true) {
-            menuPanel.transform.position = Vector2.Lerp(menuPanel.transform.position, new Vector2(270, menuPanel.transform.position.y), Time.deltaTime * speed);
+            menuPanel.transform.position = Vector2.Lerp(menuPanel.transform.position, new Vector2(menuPanelWidth / 2, menuPanel.transform.position.y), Time.deltaTime * speed);
         }
 
         // 메뉴창 끄기
         if (isSetMenu == false) {
-            menuPanel.transform.position = Vector2.Lerp(menuPanel.transform.position, new Vector2(-280, menuPanel.transform.position.y), Time.deltaTime * speed);
+            menuPanel.transform.position = Vector2.Lerp(menuPanel.transform.position, new Vector2(-menuPanelWidth / 2, menuPanel.transform.position.y), Time.deltaTime * speed);
         }
 
         // 코드창 키우기
         if (isSetCodePanel == true) {
-            codePanel.transform.position = Vector3.Lerp(codePanel.transform.position, new Vector2(codePanel.transform.position.x, 600), Time.deltaTime * speed);
+            codePanel.transform.position = Vector3.Lerp(codePanel.transform.position, new Vector2(codePanel.transform.position.x, codePanelHeight / 3), Time.deltaTime * speed);
         }
 
         // 초기 상태
@@ -41,7 +54,10 @@ public class MenuButton : MonoBehaviour
 
         // 뷰창 키우기
         if (isSetViewPanel == true) {
-            codePanel.transform.position = Vector3.Lerp(codePanel.transform.position, new Vector2(codePanel.transform.position.x, -600), Time.deltaTime * speed);
+            codePanel.transform.position = Vector3.Lerp(codePanel.transform.position, new Vector2(codePanel.transform.position.x, -codePanelHeight / 3), Time.deltaTime * speed);
+        }
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            messageBox.SetActive(true);
         }
     }
 
@@ -82,5 +98,17 @@ public class MenuButton : MonoBehaviour
             isSetCodePanel = false;
             isSetViewPanel = false;
         }
+    }
+
+    public void IsExit() {
+        messageBox.SetActive(true);
+    }
+
+    public void ConfirmExit() {
+        Application.Quit();
+    }
+
+    public void CancelExit() {
+        messageBox.SetActive(false);
     }
 }
