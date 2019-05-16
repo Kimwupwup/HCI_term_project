@@ -9,7 +9,7 @@ public class MenuButton : MonoBehaviour
 
     private GameObject menuPanel;
     private GameObject codePanel;
-    private GameObject messageBox;
+    private GameObject pausePanel;
 
     private float menuPanelWidth;
     private float codePanelHeight;
@@ -19,8 +19,8 @@ public class MenuButton : MonoBehaviour
     private bool isSetViewPanel = false;
 
     void Awake() {
-        messageBox = GameObject.FindGameObjectWithTag("messageBox");
-        messageBox.SetActive(false);
+        pausePanel = GameObject.FindGameObjectWithTag("pausePanel");
+        pausePanel.SetActive(false);
     }
 
     void Start() {
@@ -57,7 +57,7 @@ public class MenuButton : MonoBehaviour
             codePanel.transform.position = Vector3.Lerp(codePanel.transform.position, new Vector2(codePanel.transform.position.x, -codePanelHeight / 3), Time.deltaTime * speed);
         }
         if (Input.GetKeyDown(KeyCode.Escape)) {
-            messageBox.SetActive(true);
+            pausePanel.SetActive(true);
         }
     }
 
@@ -101,7 +101,7 @@ public class MenuButton : MonoBehaviour
     }
 
     public void IsExit() {
-        messageBox.SetActive(true);
+        pausePanel.SetActive(true);
     }
 
     public void ConfirmExit() {
@@ -109,6 +109,6 @@ public class MenuButton : MonoBehaviour
     }
 
     public void CancelExit() {
-        messageBox.SetActive(false);
+        pausePanel.SetActive(false);
     }
 }
