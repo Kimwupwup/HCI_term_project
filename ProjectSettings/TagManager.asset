@@ -8,6 +8,7 @@ TagManager:
   - codePanel
   - messageBox
   - pausePanel
+  - canvas
   layers:
   - Default
   - TransparentFX

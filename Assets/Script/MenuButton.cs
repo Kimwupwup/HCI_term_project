@@ -11,6 +11,8 @@ public class MenuButton : MonoBehaviour
     private GameObject codePanel;
     private GameObject pausePanel;
 
+    private Vector3 posPausePanel;
+
     private float menuPanelWidth;
     private float codePanelHeight;
 
@@ -20,6 +22,7 @@ public class MenuButton : MonoBehaviour
 
     void Awake() {
         pausePanel = GameObject.FindGameObjectWithTag("pausePanel");
+        posPausePanel = pausePanel.transform.position;
         pausePanel.SetActive(false);
     }
 
@@ -57,6 +60,7 @@ public class MenuButton : MonoBehaviour
             codePanel.transform.position = Vector3.Lerp(codePanel.transform.position, new Vector2(codePanel.transform.position.x, -codePanelHeight / 3), Time.deltaTime * speed);
         }
         if (Input.GetKeyDown(KeyCode.Escape)) {
+            pausePanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
             pausePanel.SetActive(true);
         }
     }
@@ -101,6 +105,7 @@ public class MenuButton : MonoBehaviour
     }
 
     public void IsExit() {
+        pausePanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
         pausePanel.SetActive(true);
     }
 
@@ -109,6 +114,7 @@ public class MenuButton : MonoBehaviour
     }
 
     public void CancelExit() {
+        pausePanel.GetComponent<RectTransform>().position = posPausePanel;
         pausePanel.SetActive(false);
     }
 }
