@@ -2,28 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
     private GameObject tmpButton;
-    private bool isInCodePanel = false;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private GameObject codePanel;
+    private bool isInCodePanel = false;    
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void Awake() {
+        codePanel = GameObject.FindGameObjectWithTag("codePanel");
     }
 
     public void OnBeginDrag(PointerEventData eventData) {
-        tmpButton = Instantiate(this, Input.mousePosition, Quaternion.identity).gameObject;
-        
-        tmpButton.transform.SetParent(GameObject.FindGameObjectWithTag("canvas").transform);
-
+        if (this.CompareTag("button") == true) {
+            tmpButton = Instantiate(this, Input.mousePosition, Quaternion.identity).gameObject;
+            tmpButton.tag = "clone";
+            tmpButton.transform.SetParent(GameObject.FindGameObjectWithTag("canvas").transform);
+            tmpButton.GetComponent<Image>().raycastTarget = false;
+        } else {
+            tmpButton = this.gameObject;
+            tmpButton.transform.SetParent(GameObject.FindGameObjectWithTag("canvas").transform);
+            tmpButton.GetComponent<Image>().raycastTarget = false;
+        }        
     }
 
     public void OnDrag(PointerEventData eventData) {
@@ -31,19 +32,15 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
     }
 
     public void OnEndDrag(PointerEventData eventData) {
-        if (!isInCodePanel) {
+        bool isTrue;
+        isTrue = codePanel.GetComponent<IsTrue>().isTrue;
+
+        if (!isTrue) {
             Destroy(tmpButton);
+            Debug.Log("Destroy");
+        } else {
+            tmpButton.transform.SetParent(GameObject.FindGameObjectWithTag("codePanel").transform);
+            tmpButton.GetComponent<Image>().raycastTarget = true;
         }
-    }
-
-    public void IsTrue() {
-        isInCodePanel = true;
-        Debug.Log(isInCodePanel);
-    }
-
-    public void IsFalse() {
-        isInCodePanel = false;
-        Debug.Log(isInCodePanel);
-
     }
 }

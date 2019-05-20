@@ -9,6 +9,8 @@ TagManager:
   - messageBox
   - pausePanel
   - canvas
+  - button
+  - clone
   layers:
   - Default
   - TransparentFX
