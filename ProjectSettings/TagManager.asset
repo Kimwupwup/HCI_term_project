@@ -12,6 +12,7 @@ TagManager:
   - button
   - clone
   - child
+  - controller
   layers:
   - Default
   - TransparentFX

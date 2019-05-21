@@ -7,10 +7,13 @@ using UnityEngine.UI;
 public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
     private GameObject tmpButton;
-    private GameObject codePanel;
+    private GameObject objController;
+    private Controller controller;
+    private GameObject objTarget;
 
     public void Awake() {
-        codePanel = GameObject.FindGameObjectWithTag("codePanel");
+        objController = GameObject.FindGameObjectWithTag("controller");
+        controller = objController.GetComponent<Controller>();
     }
 
     public void OnBeginDrag(PointerEventData eventData) {
@@ -21,6 +24,7 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
             tmpButton.GetComponent<Image>().raycastTarget = false;
         } else {
             tmpButton = this.gameObject;
+            tmpButton.transform.parent.GetComponent<Image>().raycastTarget = true;
             tmpButton.transform.SetParent(GameObject.FindGameObjectWithTag("canvas").transform);
             tmpButton.GetComponent<Image>().raycastTarget = false;
         }        
@@ -31,8 +35,21 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
     }
 
     public void OnEndDrag(PointerEventData eventData) {
-        bool isTrue;
-        isTrue = codePanel.GetComponent<IsTrue>().isTrue;
+        
+        objTarget = controller.GetObjTarget();
+        if (objTarget != null)
+            Debug.Log(objTarget.name);
+        bool isChild = controller.GetIsCodeChild();
+
+        if (isChild && objTarget.CompareTag("child")) {
+            tmpButton.transform.position = objTarget.transform.position;
+            tmpButton.transform.SetParent(objTarget.transform);
+            tmpButton.GetComponent<Image>().raycastTarget = true;
+            objTarget.GetComponent<Image>().raycastTarget = false;
+            return;
+        }
+
+        bool isTrue = controller.GetIsCodePanel();
 
         if (!isTrue) {
             Destroy(tmpButton);

@@ -126,6 +126,71 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 6947986444550269216}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &118411790 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1570420844610439646, guid: 6b9e072464e23e4448c8d7477e2b60bd,
+    type: 3}
+  m_PrefabInstance: {fileID: 2496471065904407569}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &118411791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 118411790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 118411792}
+          m_MethodName: SetTrue
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 118411792}
+          m_MethodName: SetFalse
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+--- !u!114 &118411792 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4327435703355164459, guid: 6b9e072464e23e4448c8d7477e2b60bd,
+    type: 3}
+  m_PrefabInstance: {fileID: 2496471065904407569}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 118411790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3675560e0e770d449f41ea661f4624e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &187583723
 GameObject:
   m_ObjectHideFlags: 0
@@ -506,6 +571,49 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &612960856
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 612960858}
+  - component: {fileID: 612960857}
+  m_Layer: 0
+  m_Name: Controller
+  m_TagString: controller
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &612960857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 612960856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f25451e36bdf8a7498a926ecc7a98835, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &612960858
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 612960856}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 133.10901, y: 2241.3296, z: -890.6988}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &706501468
@@ -606,7 +714,7 @@ RectTransform:
   - {fileID: 1418593373}
   - {fileID: 924481248}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -749,9 +857,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6c299fe4d92132449f9386b860f0fc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTrue: 0
-  isChild: 0
-  target: {fileID: 0}
 --- !u!1 &749759356
 GameObject:
   m_ObjectHideFlags: 0
@@ -2128,7 +2233,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &155174055265425620
 PrefabInstance:
