@@ -8,7 +8,6 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
 {
     private GameObject tmpButton;
     private GameObject codePanel;
-    private bool isInCodePanel = false;    
 
     public void Awake() {
         codePanel = GameObject.FindGameObjectWithTag("codePanel");
