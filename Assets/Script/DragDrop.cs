@@ -24,7 +24,9 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
             tmpButton.GetComponent<Image>().raycastTarget = false;
         } else {
             tmpButton = this.gameObject;
-            tmpButton.transform.parent.GetComponent<Image>().raycastTarget = true;
+            if (tmpButton.transform.parent.GetChild(0).CompareTag("child")) {
+                tmpButton.transform.parent.GetChild(0).gameObject.SetActive(true);
+            }
             tmpButton.transform.SetParent(GameObject.FindGameObjectWithTag("canvas").transform);
             tmpButton.GetComponent<Image>().raycastTarget = false;
         }        
@@ -36,17 +38,27 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
 
     public void OnEndDrag(PointerEventData eventData) {
         
-        objTarget = controller.GetObjTarget();
-        if (objTarget != null)
-            Debug.Log(objTarget.name);
         bool isChild = controller.GetIsCodeChild();
 
-        if (isChild && objTarget.CompareTag("child")) {
-            tmpButton.transform.position = objTarget.transform.position;
-            tmpButton.transform.SetParent(objTarget.transform);
-            tmpButton.GetComponent<Image>().raycastTarget = true;
-            objTarget.GetComponent<Image>().raycastTarget = false;
-            return;
+        if (isChild) {
+            objTarget = controller.GetObjTarget();
+
+            if (objTarget != null) {
+                Debug.Log(objTarget.transform.parent.name);
+            }
+            if (objTarget.CompareTag("child")) {
+                float temp = tmpButton.GetComponent<RectTransform>().rect.width;
+                temp = objTarget.GetComponent<RectTransform>().rect.width - temp;
+                tmpButton.transform.position = 
+                    new Vector3(objTarget.transform.position.x - (temp / 2),
+                    objTarget.transform.position.y, 0);
+                tmpButton.transform.SetParent(objTarget.transform.parent);
+                tmpButton.GetComponent<Image>().raycastTarget = true;
+                objTarget.SetActive(false);
+                controller.SetObjTarget(null);
+                controller.SetIsCodeChild(false);
+                return;
+            }
         }
 
         bool isTrue = controller.GetIsCodePanel();

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MenuButton : MonoBehaviour
 {
-    
     public float speed = 1;
 
     private GameObject menuPanel;
@@ -19,6 +18,7 @@ public class MenuButton : MonoBehaviour
     private bool isSetMenu = false;
     private bool isSetCodePanel = false;
     private bool isSetViewPanel = false;
+
 
     void Awake() {
         pausePanel = GameObject.FindGameObjectWithTag("pausePanel");

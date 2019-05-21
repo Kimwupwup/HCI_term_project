@@ -15,6 +15,7 @@ public class TriggerChildBlock : MonoBehaviour
     public void SetTrue() {
         controller.SetIsCodeChild(true);
         controller.SetObjTarget(this.gameObject);
+        //Debug.Log(this.transform.parent.name);
     }
 
     public void SetFalse() {

@@ -16,11 +16,9 @@ public class TriggerCodePanel : MonoBehaviour {
 
     public void setTrue() {
         controller.SetIsCodePanel(true);
-        controller.SetObjTarget(this.gameObject);
     }
 
     public void setFalse() {
         controller.SetIsCodePanel(false);
-        controller.SetObjTarget(null);
     }
 }

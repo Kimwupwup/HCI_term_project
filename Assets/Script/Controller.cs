@@ -12,23 +12,23 @@ public class Controller : MonoBehaviour
         return isCodePanel;
     }
 
-    public void SetIsCodePanel(bool isCodePanel) {
-        this.isCodePanel = isCodePanel;
+    public void SetIsCodePanel(bool a) {
+        isCodePanel = a;
     }
 
     public bool GetIsCodeChild() {
         return isCodeChild;
     }
 
-    public void SetIsCodeChild(bool isCodeChild) {
-        this.isCodeChild = isCodeChild;
+    public void SetIsCodeChild(bool a) {
+        isCodeChild = a;
     }
 
     public GameObject GetObjTarget() {
         return objTarget;
     }
 
-    public void SetObjTarget(GameObject objTarget) {
-        this.objTarget = objTarget;
+    public void SetObjTarget(GameObject a) {
+        objTarget = a;
     }
 }
