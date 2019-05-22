@@ -24,8 +24,8 @@ public class Shadow : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
+        shadow.GetComponent<SpriteRenderer>().flipX = this.GetComponent<SpriteRenderer>().flipX;
         shadow.transform.position = new Vector2(this.transform.position.x,
             groundEndPoint.transform.position.y - (this.transform.position.y - groundEndPoint.transform.position.y));
     }
