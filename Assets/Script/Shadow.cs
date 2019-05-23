@@ -19,7 +19,7 @@ public class Shadow : MonoBehaviour
         shadow.transform.localScale = this.transform.localScale;
 
         shadow.GetComponent<SpriteRenderer>().flipY = true;
-
+        shadow.GetComponent<SpriteRenderer>().sortingOrder = 2;
         shadow.transform.SetParent(this.transform);
     }
 
