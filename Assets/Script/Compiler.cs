@@ -8,6 +8,8 @@ public class Compiler : MonoBehaviour
     private List<GameObject> functions = new List<GameObject>();
     private List<int> loopIndex = new List<int>();
     private List<int> endLoopIndex = new List<int>();
+    private List<int> ifIndex = new List<int>();
+    private List<int> endIfIndex = new List<int>();
 
     private bool isCompiled = false;
     private Rigidbody2D player;
@@ -15,6 +17,9 @@ public class Compiler : MonoBehaviour
     private int frameCount = 0;
     private int delayTime = 1;
     private int currentIndex = 0;
+
+    private int cnt = -1;
+    private int conditionCnt = -1;
 
     private void Start() {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody2D>();
@@ -43,23 +48,31 @@ public class Compiler : MonoBehaviour
                     //Debug.Log(functions[currentIndex].name);
                     functionEndLoop();
                 } else if (functions[currentIndex].name == "BtnDelay(Clone)") {
-                    string n = functions[currentIndex].transform.GetChild(0).GetComponent<InputField>().text;
-                    float temp;
-                    if (string.IsNullOrEmpty(n)) {
-                        temp = 2;
-                    } else {
-                        temp = float.Parse(n);
-                    }
-                    functionDelay(temp);
+                    functionDelay();
+                } else if (functions[currentIndex].name == "BtnIf(Clone)") {
+                    functionIf();
+                } else if (functions[currentIndex].name == "BtnEndIf(Clone)") {
+                    functionEndIf();
+                } else if (functions[currentIndex].name == "BtnCnt=(Clone)") {
+                    functionSetCnt();
+                } else if (functions[currentIndex].name == "BtnCnt++(Clone)") {
+                    functionIncreaseCnt();
+                } else if (functions[currentIndex].name == "BtnBreak(Clone)") {
+                    functionBreak();
                 }
+
                 currentIndex++;
                 frameCount = 0;
             } else {
                 currentIndex = 0;
                 delayTime = 1;
+                cnt = -1;
+                conditionCnt = -1;
                 isCompiled = false;
                 loopIndex.Clear();
                 endLoopIndex.Clear();
+                ifIndex.Clear();
+                endIfIndex.Clear();
                 functions.Clear();
             }
         }
@@ -69,10 +82,14 @@ public class Compiler : MonoBehaviour
     public void ResetView() {
         currentIndex = 0;
         delayTime = 1;
+        cnt = -1;
+        conditionCnt = -1;
         isCompiled = false;
         functions.Clear();
         loopIndex.Clear();
         endLoopIndex.Clear();
+        ifIndex.Clear();
+        endIfIndex.Clear();
         player.transform.position = new Vector2(0, 0);
         player.GetComponent<SpriteRenderer>().flipX = false;
     }
@@ -111,22 +128,52 @@ public class Compiler : MonoBehaviour
                 if (code.name == "BtnEndLoop(Clone)") {
                     endLoopIndex.Add(functions.Count - 1);
                 }
+                if (code.name == "BtnIf(Clone)") {
+                    ifIndex.Add(functions.Count - 1);
+                }
+                if (code.name == "BtnEndIf(Clone)") {
+                    endIfIndex.Add(functions.Count - 1);
+                }
 
-                if (code.transform.childCount < 2 && code.name != "BtnDelay(Clone)") {
+                if (code.transform.childCount < 2 && 
+                    (code.name != "BtnDelay(Clone)" &&
+                    code.name != "BtnIf(Clone)" &&
+                    code.name != "BtnCnt=(Clone)")) {
                     break;
-                } else if (code.transform.childCount < 3 && code.name == "BtnDelay(Clone)") {
+                } else if (code.transform.childCount < 3 &&
+                    (code.name == "BtnDelay(Clone)" ||
+                    code.name == "BtnIf(Clone)" ||
+                    code.name == "BtnCnt=(Clone)")) {
                     break;
                 }
 
-                if (code.name == "BtnDelay(Clone)") {
+                if (code.name == "BtnIf(Clone)") {
+                    if (code.transform.GetChild(2).CompareTag("child")) {
+                        code = code.transform.GetChild(2).gameObject;
+                    } else {
+                        code = code.transform.GetChild(3).gameObject;
+                    }
+                } else if (code.name == "BtnDelay(Clone)" ||
+                    code.name == "BtnCnt=(Clone)") {
                     code = code.transform.GetChild(2).gameObject;
                 } else {
                     code = code.transform.GetChild(1).gameObject;
                 }
             }
         }
-        codesQueue.Clear();
-        isCompiled = true;
+
+        if (loopIndex.Count != endLoopIndex.Count) {
+            AlertError(1);
+            codesQueue.Clear();
+            isCompiled = false;
+        } else if (ifIndex.Count != endIfIndex.Count) {
+            AlertError(2);
+            codesQueue.Clear();
+            isCompiled = false;
+        } else {
+            codesQueue.Clear();
+            isCompiled = true;
+        }
     }
 
     public void functionMove() {
@@ -162,16 +209,95 @@ public class Compiler : MonoBehaviour
         for (int i = 0; i < endLoopIndex.Count; i++) {
             if (currentIndex == endLoopIndex[i]) {
                 currentIndex = loopIndex[loopIndex.Count - 1 - i] - 1;
+                break;
             }
         }
         delayTime = 1;
     }
 
-    public void functionDelay(float delay) {
-        if (delay == 0) {
+    public void functionDelay() {
+        string n = functions[currentIndex].transform.GetChild(0).GetComponent<InputField>().text;
+        float temp;
+        if (string.IsNullOrEmpty(n)) {
+            temp = 2;
+        } else {
+            temp = float.Parse(n);
+        }
+
+        if (temp == 0) {
             delayTime = 1;
         } else {
-            delayTime = (int)(60 * delay);
+            delayTime = (int)(60 * temp);
         }
+    }
+
+    public void functionIf() {
+        if (functions[currentIndex].transform.GetChild(2).name == "BtnCount(Clone)") {
+            if (string.IsNullOrEmpty(functions[currentIndex].transform.GetChild(2).GetChild(0).GetComponent<InputField>().text)) {
+                conditionCnt = 2;
+            } else {
+                conditionCnt = int.Parse(functions[currentIndex].transform.GetChild(2).GetChild(0).GetComponent<InputField>().text);
+            }
+        } else {
+            if (string.IsNullOrEmpty(functions[currentIndex].transform.GetChild(3).GetChild(0).GetComponent<InputField>().text)) {
+                conditionCnt = 2;
+            } else {
+                conditionCnt = int.Parse(functions[currentIndex].transform.GetChild(3).GetChild(0).GetComponent<InputField>().text);
+            }
+        }
+
+        if (cnt == -1) {
+            AlertError(0);
+        }
+        if (cnt != conditionCnt) {
+            for (int i = 0; i < ifIndex.Count; i++) {
+                if (currentIndex == ifIndex[i]) {
+                    currentIndex = endIfIndex[0 + i] - 1;
+                    break;
+                }
+            }
+        }
+        delayTime = 1;
+    }
+
+    public void functionEndIf() {
+        delayTime = 1;
+    }
+
+    public void functionSetCnt() {
+        int tempCnt;
+        if (string.IsNullOrEmpty(functions[currentIndex].transform.GetChild(0).GetComponent<InputField>().text)) {
+            tempCnt = 2;
+        } else {
+            tempCnt = int.Parse(functions[currentIndex].transform.GetChild(0).GetComponent<InputField>().text);
+        }
+        cnt = tempCnt;
+        delayTime = 1;
+    }
+
+    public void functionIncreaseCnt() {
+        cnt++;
+        delayTime = 1;
+    }
+
+    public void functionBreak() {
+        for (int i = 0; i < endLoopIndex.Count; i++) {
+            if (currentIndex < endLoopIndex[i]) {
+                currentIndex = endLoopIndex[i];
+                break;
+            }
+        }
+        delayTime = 1;
+    }
+
+    public void AlertError(int error) {
+        if (error == 0) {
+            Debug.Log("CNT is not defined!");
+        } else if (error == 1) {
+            Debug.Log("LOOP is incorrected!");
+        } else if (error == 2) {
+            Debug.Log("IF is incorrected!");
+        }
+
     }
 }

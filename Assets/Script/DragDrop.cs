@@ -23,7 +23,9 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
             tmpButton.transform.SetParent(GameObject.FindGameObjectWithTag("canvas").transform);
             tmpButton.GetComponent<Image>().raycastTarget = false;
             
-            if (tmpButton.name == "BtnDelay(Clone)") {
+            if (tmpButton.name == "BtnDelay(Clone)" || 
+                tmpButton.name == "BtnCnt=(Clone)" ||
+                tmpButton.name == "BtnCount(Clone)") {
                 tmpButton.transform.GetChild(0).gameObject.SetActive(true);
             }
         } else {
@@ -36,6 +38,8 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
             } else {
                 if (tmpButton.transform.parent.GetChild(0).CompareTag("child")) {
                     tmpButton.transform.parent.GetChild(0).gameObject.SetActive(true);
+                } else if (tmpButton.transform.parent.GetChild(1).CompareTag("child")) {
+                    tmpButton.transform.parent.GetChild(1).gameObject.SetActive(true);
                 }
             }
             tmpButton.transform.SetParent(GameObject.FindGameObjectWithTag("canvas").transform);

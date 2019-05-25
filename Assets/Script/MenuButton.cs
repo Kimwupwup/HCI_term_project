@@ -160,4 +160,19 @@ public class MenuButton : MonoBehaviour
         pausePanel.GetComponent<RectTransform>().position = posPausePanel;
         pausePanel.SetActive(false);
     }
+
+    public void BtnBlue() {
+        GameObject.FindGameObjectWithTag("menuPanel1").transform.localEulerAngles = new Vector3(0, 90, 0);
+        GameObject.FindGameObjectWithTag("menuPanel2").transform.localEulerAngles = new Vector3(0, 90, 0);
+    }
+
+    public void BtnRed() {
+        GameObject.FindGameObjectWithTag("menuPanel1").transform.localEulerAngles = new Vector3(0, 90, 0);
+        GameObject.FindGameObjectWithTag("menuPanel2").transform.localEulerAngles = new Vector3(0, 0, 0);
+    }
+
+    public void BtnYellow() {
+        GameObject.FindGameObjectWithTag("menuPanel1").transform.localEulerAngles = new Vector3(0, 0, 0);
+        GameObject.FindGameObjectWithTag("menuPanel2").transform.localEulerAngles = new Vector3(0, 90, 0);
+    }
 }
