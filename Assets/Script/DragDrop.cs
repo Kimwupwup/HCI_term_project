@@ -22,10 +22,21 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
             tmpButton.tag = "clone";
             tmpButton.transform.SetParent(GameObject.FindGameObjectWithTag("canvas").transform);
             tmpButton.GetComponent<Image>().raycastTarget = false;
+            
+            if (tmpButton.name == "BtnDelay(Clone)") {
+                tmpButton.transform.GetChild(0).gameObject.SetActive(true);
+            }
         } else {
             tmpButton = this.gameObject;
-            if (tmpButton.transform.parent.GetChild(0).CompareTag("child")) {
-                tmpButton.transform.parent.GetChild(0).gameObject.SetActive(true);
+
+            if (tmpButton.name == "BtnCount(Clone)") {
+                if (tmpButton.transform.parent.GetChild(1).CompareTag("condition")) {
+                    tmpButton.transform.parent.GetChild(1).gameObject.SetActive(true);
+                }
+            } else {
+                if (tmpButton.transform.parent.GetChild(0).CompareTag("child")) {
+                    tmpButton.transform.parent.GetChild(0).gameObject.SetActive(true);
+                }
             }
             tmpButton.transform.SetParent(GameObject.FindGameObjectWithTag("canvas").transform);
             tmpButton.GetComponent<Image>().raycastTarget = false;
@@ -46,12 +57,31 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
             if (objTarget != null) {
                 Debug.Log(objTarget.transform.parent.name);
             }
-            if (objTarget.CompareTag("child")) {
+
+            if (objTarget.CompareTag("condition") && tmpButton.name == "BtnCount(Clone)") {
                 float temp = tmpButton.GetComponent<RectTransform>().rect.width;
                 temp = objTarget.GetComponent<RectTransform>().rect.width - temp;
-                tmpButton.transform.position = 
+
+                tmpButton.transform.position =
+                    new Vector3(objTarget.transform.position.x - (temp / 2),
+                    objTarget.transform.position.y + 10, 0);
+
+                tmpButton.transform.SetParent(objTarget.transform.parent);
+                tmpButton.GetComponent<Image>().raycastTarget = true;
+                objTarget.SetActive(false);
+                controller.SetObjTarget(null);
+                controller.SetIsCodeChild(false);
+                return;
+            }
+
+            if (objTarget.CompareTag("child") && tmpButton.name != "BtnCount(Clone)") {
+                float temp = tmpButton.GetComponent<RectTransform>().rect.width;
+                temp = objTarget.GetComponent<RectTransform>().rect.width - temp;
+
+                tmpButton.transform.position =
                     new Vector3(objTarget.transform.position.x - (temp / 2),
                     objTarget.transform.position.y, 0);
+
                 tmpButton.transform.SetParent(objTarget.transform.parent);
                 tmpButton.GetComponent<Image>().raycastTarget = true;
                 objTarget.SetActive(false);

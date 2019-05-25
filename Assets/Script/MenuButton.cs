@@ -10,6 +10,8 @@ public class MenuButton : MonoBehaviour
     private GameObject codePanel;
     private GameObject pausePanel;
 
+    private float movePosition;
+
     private Vector3 posPausePanel;
 
     private float menuPanelWidth;
@@ -18,7 +20,7 @@ public class MenuButton : MonoBehaviour
     private bool isSetMenu = false;
     private bool isSetCodePanel = false;
     private bool isSetViewPanel = false;
-
+    private bool isTyping = false;
 
     void Awake() {
         pausePanel = GameObject.FindGameObjectWithTag("pausePanel");
@@ -45,9 +47,23 @@ public class MenuButton : MonoBehaviour
             menuPanel.transform.position = Vector2.Lerp(menuPanel.transform.position, new Vector2(-menuPanelWidth / 2, menuPanel.transform.position.y), Time.deltaTime * speed);
         }
 
+        // 코드창 키우기(타이핑중일때)
+        if (isSetCodePanel == true && isTyping == true) {
+            codePanel.transform.position = Vector3.Lerp(codePanel.transform.position, 
+                new Vector2(codePanel.transform.position.x, 2960/2 - movePosition), 
+                Time.deltaTime * speed);
+
+            GameObject.FindGameObjectWithTag("ground").transform.position =
+                Vector3.Lerp(GameObject.FindGameObjectWithTag("ground").transform.position,
+                new Vector3(0, -5 + (10 * ((2960 / 2 - movePosition) / 2960)), 0), Time.deltaTime * speed);
+        }
+
         // 코드창 키우기
-        if (isSetCodePanel == true) {
-            codePanel.transform.position = Vector3.Lerp(codePanel.transform.position, new Vector2(codePanel.transform.position.x, codePanelHeight / 3), Time.deltaTime * speed);
+        if (isSetCodePanel == true && isTyping == false) {
+            codePanel.transform.position = Vector3.Lerp(codePanel.transform.position, 
+                new Vector2(codePanel.transform.position.x, codePanelHeight / 3), 
+                Time.deltaTime * speed);
+
             GameObject.FindGameObjectWithTag("ground").transform.position =
                 Vector3.Lerp(GameObject.FindGameObjectWithTag("ground").transform.position,
                 new Vector3(0, -1.67f, 0), Time.deltaTime * speed);
@@ -72,6 +88,24 @@ public class MenuButton : MonoBehaviour
             pausePanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
             pausePanel.SetActive(true);
         }
+    }
+
+    public void ResetScreen() {
+        isSetCodePanel = true;
+        isSetViewPanel = false;
+        isTyping = false;
+        movePosition = 0;
+    }
+
+    public void OnlyCodePanel(GameObject btn) {
+        isSetMenu = false;
+        isSetCodePanel = true;
+        isTyping = true;
+        movePosition = btn.transform.position.y - (2960 / 2);
+        if (codePanel.transform.position.y < 10) {
+            movePosition += 980;
+        }
+        //Debug.Log(codePanel.transform.position.y);
     }
 
     public void TurnOnMenu() {
