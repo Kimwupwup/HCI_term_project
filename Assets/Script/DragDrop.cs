@@ -52,7 +52,17 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
     }
 
     public void OnEndDrag(PointerEventData eventData) {
-        
+
+        bool isTrue = controller.GetIsCodePanel();
+
+        if (!isTrue) {
+            Destroy(tmpButton);
+            Debug.Log("Destroy");
+        } else {
+            tmpButton.transform.SetParent(GameObject.FindGameObjectWithTag("codePanel").transform);
+            tmpButton.GetComponent<Image>().raycastTarget = true;
+        }
+
         bool isChild = controller.GetIsCodeChild();
 
         if (isChild) {
@@ -93,16 +103,6 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
                 controller.SetIsCodeChild(false);
                 return;
             }
-        }
-
-        bool isTrue = controller.GetIsCodePanel();
-
-        if (!isTrue) {
-            Destroy(tmpButton);
-            Debug.Log("Destroy");
-        } else {
-            tmpButton.transform.SetParent(GameObject.FindGameObjectWithTag("codePanel").transform);
-            tmpButton.GetComponent<Image>().raycastTarget = true;
         }
     }
 }

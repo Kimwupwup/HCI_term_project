@@ -9,10 +9,13 @@ public class MenuButton : MonoBehaviour
     private GameObject menuPanel;
     private GameObject codePanel;
     private GameObject pausePanel;
+    private GameObject errorPanel;
 
     private float movePosition;
+    private float prevPosition;
 
     private Vector3 posPausePanel;
+    private Vector3 posErrorPanel;
 
     private float menuPanelWidth;
     private float codePanelHeight;
@@ -23,8 +26,10 @@ public class MenuButton : MonoBehaviour
     private bool isTyping = false;
 
     void Awake() {
+        errorPanel = GameObject.FindGameObjectWithTag("errorPanel");
         pausePanel = GameObject.FindGameObjectWithTag("pausePanel");
         posPausePanel = pausePanel.transform.position;
+        posErrorPanel = errorPanel.transform.position;
         pausePanel.SetActive(false);
     }
 
@@ -91,7 +96,11 @@ public class MenuButton : MonoBehaviour
     }
 
     public void ResetScreen() {
-        isSetCodePanel = true;
+        if (prevPosition < 10) {
+            isSetCodePanel = false;
+        } else {
+            isSetCodePanel = true;
+        }        
         isSetViewPanel = false;
         isTyping = false;
         movePosition = 0;
@@ -102,6 +111,7 @@ public class MenuButton : MonoBehaviour
         isSetCodePanel = true;
         isTyping = true;
         movePosition = btn.transform.position.y - (2960 / 2);
+        prevPosition = codePanel.transform.position.y;
         if (codePanel.transform.position.y < 10) {
             movePosition += 980;
         }
@@ -159,6 +169,10 @@ public class MenuButton : MonoBehaviour
     public void CancelExit() {
         pausePanel.GetComponent<RectTransform>().position = posPausePanel;
         pausePanel.SetActive(false);
+    }
+
+    public void ResetErrorMessage() {
+        errorPanel.GetComponent<RectTransform>().position = posErrorPanel;
     }
 
     public void BtnBlue() {

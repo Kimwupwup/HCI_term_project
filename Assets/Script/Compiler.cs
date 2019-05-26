@@ -142,8 +142,10 @@ public class Compiler : MonoBehaviour
                     break;
                 } else if (code.transform.childCount < 3 &&
                     (code.name == "BtnDelay(Clone)" ||
-                    code.name == "BtnIf(Clone)" ||
                     code.name == "BtnCnt=(Clone)")) {
+                    break;
+                } else if (code.transform.childCount < 4 &&
+                    code.name == "BtnIf(Clone)") {
                     break;
                 }
 
@@ -276,6 +278,9 @@ public class Compiler : MonoBehaviour
     }
 
     public void functionIncreaseCnt() {
+        if (cnt == -1) {
+            AlertError(0);
+        }
         cnt++;
         delayTime = 1;
     }
@@ -291,12 +296,23 @@ public class Compiler : MonoBehaviour
     }
 
     public void AlertError(int error) {
+        GameObject errorPanel = GameObject.FindGameObjectWithTag("errorPanel");
+
         if (error == 0) {
             Debug.Log("CNT is not defined!");
+            errorPanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+            errorPanel.transform.GetChild(1).localEulerAngles = new Vector3(0, 90, 0);
+            errorPanel.transform.GetChild(2).localEulerAngles = new Vector3(0, 90, 0);
         } else if (error == 1) {
             Debug.Log("LOOP is incorrected!");
+            errorPanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+            errorPanel.transform.GetChild(1).localEulerAngles = new Vector3(0, 0, 0);
+            errorPanel.transform.GetChild(2).localEulerAngles = new Vector3(0, 90, 0);
         } else if (error == 2) {
             Debug.Log("IF is incorrected!");
+            errorPanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+            errorPanel.transform.GetChild(1).localEulerAngles = new Vector3(0, 90, 0);
+            errorPanel.transform.GetChild(2).localEulerAngles = new Vector3(0, 0, 0);
         }
 
     }

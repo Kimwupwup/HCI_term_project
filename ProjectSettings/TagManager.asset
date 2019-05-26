@@ -17,6 +17,10 @@ TagManager:
   - condition
   - menuPanel1
   - menuPanel2
+  - errorPanel
+  - errorMessageBox0
+  - errorMessageBox1
+  - errorMessageBox2
   layers:
   - Default
   - TransparentFX
