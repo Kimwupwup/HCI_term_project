@@ -25,6 +25,9 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.GraphicRaycaster
     - UnityEngine.UI.Image
     - UnityEngine.UI.InputField
+    - UnityEngine.UI.RectMask2D
+    - UnityEngine.UI.ScrollRect
+    - UnityEngine.UI.Scrollbar
     - UnityEngine.UI.Text
   sceneClasses:
     Assets/Scenes/SampleScene.unity:
@@ -66,6 +69,12 @@ ScriptsOnlyBuild:
       Script: {instanceID: 9348}
     - Class: 114
       Script: {instanceID: 9350}
+    - Class: 114
+      Script: {instanceID: 9372}
+    - Class: 114
+      Script: {instanceID: 9374}
+    - Class: 114
+      Script: {instanceID: 9376}
     - Class: 114
       Script: {instanceID: 9384}
     - Class: 114
@@ -778,4 +787,4 @@ ScriptsOnlyBuild:
   platform: 13
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: E:/GitHub/HCI_term_project/HCI_term_project/test.apk
+  playerPath: E:/GitHub/HCI_term_project/test.apk

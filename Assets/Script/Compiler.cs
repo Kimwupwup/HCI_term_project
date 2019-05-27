@@ -10,6 +10,8 @@ public class Compiler : MonoBehaviour
     private List<int> endLoopIndex = new List<int>();
     private List<int> ifIndex = new List<int>();
     private List<int> endIfIndex = new List<int>();
+    private List<string> varName = new List<string>();
+    private List<int> varValue = new List<int>();
 
     private bool isCompiled = false;
     private Rigidbody2D player;
@@ -34,31 +36,35 @@ public class Compiler : MonoBehaviour
                 Debug.Log(currentIndex);
                 if (functions[currentIndex].name == "BtnMove(Clone)") {
                     //Debug.Log(functions[currentIndex].name);
-                    functionMove();
+                    FunctionMove();
                 } else if (functions[currentIndex].name == "BtnJump(Clone)") {
                     //Debug.Log(functions[currentIndex].name);
-                    functionJump();
+                    FunctionJump();
                 } else if (functions[currentIndex].name == "BtnRotate(Clone)") {
                     //Debug.Log(functions[currentIndex].name);
-                    functionRotate();
+                    FunctionRotate();
                 } else if (functions[currentIndex].name == "BtnLoop(Clone)") {
                     //Debug.Log(functions[currentIndex].name);
-                    functionLoop();
+                    FunctionLoop();
                 } else if (functions[currentIndex].name == "BtnEndLoop(Clone)") {
                     //Debug.Log(functions[currentIndex].name);
-                    functionEndLoop();
+                    FunctionEndLoop();
                 } else if (functions[currentIndex].name == "BtnDelay(Clone)") {
-                    functionDelay();
+                    FunctionDelay();
                 } else if (functions[currentIndex].name == "BtnIf(Clone)") {
-                    functionIf();
+                    FunctionIf();
                 } else if (functions[currentIndex].name == "BtnEndIf(Clone)") {
-                    functionEndIf();
+                    FunctionEndIf();
                 } else if (functions[currentIndex].name == "BtnCnt=(Clone)") {
-                    functionSetCnt();
+                    FunctionSetCnt();
                 } else if (functions[currentIndex].name == "BtnCnt++(Clone)") {
-                    functionIncreaseCnt();
+                    FunctionIncreaseCnt();
                 } else if (functions[currentIndex].name == "BtnBreak(Clone)") {
-                    functionBreak();
+                    FunctionBreak();
+                } else if (functions[currentIndex].name == "BtnVariable=(Clone)") {
+                    FunctionSetVariable();
+                } else if (functions[currentIndex].name == "BtnVariable++(Clone)") {
+                    FunctionIncreaseValue();
                 }
 
                 currentIndex++;
@@ -73,6 +79,8 @@ public class Compiler : MonoBehaviour
                 endLoopIndex.Clear();
                 ifIndex.Clear();
                 endIfIndex.Clear();
+                varName.Clear();
+                varValue.Clear();
                 functions.Clear();
             }
         }
@@ -90,6 +98,8 @@ public class Compiler : MonoBehaviour
         endLoopIndex.Clear();
         ifIndex.Clear();
         endIfIndex.Clear();
+        varName.Clear();
+        varValue.Clear();
         player.transform.position = new Vector2(0, 0);
         player.GetComponent<SpriteRenderer>().flipX = false;
     }
@@ -130,9 +140,122 @@ public class Compiler : MonoBehaviour
                 }
                 if (code.name == "BtnIf(Clone)") {
                     ifIndex.Add(functions.Count - 1);
+
+                    string tempName = null;
+                    bool isExist = false;
+
+                    if (code.transform.GetChild(2).name == "BtnCount(Clone)") {
+                        if (string.IsNullOrEmpty(code.transform.GetChild(2).GetChild(0).GetComponent<InputField>().text)) {
+                            code.transform.GetChild(2).GetChild(0).GetComponent<InputField>().text = "2";
+                        }
+                    } else if (code.transform.GetChild(3).name == "BtnCount(Clone)") {
+                        if (string.IsNullOrEmpty(code.transform.GetChild(3).GetChild(0).GetComponent<InputField>().text)) {
+                            code.transform.GetChild(3).GetChild(0).GetComponent<InputField>().text = "2";
+                        }
+                    }
+
+                    if (code.transform.GetChild(2).name == "BtnVariable==(Clone)") {
+                        if (string.IsNullOrEmpty(code.transform.GetChild(2).GetChild(1).GetComponent<InputField>().text)) {
+                            code.transform.GetChild(2).GetChild(1).GetComponent<InputField>().text = "2";
+                        }
+                        if (string.IsNullOrEmpty(code.transform.GetChild(2).GetChild(0).GetComponent<InputField>().text)) {
+                            code.transform.GetChild(2).GetChild(0).GetComponent<InputField>().text = "a";
+                        }
+                        tempName = code.transform.GetChild(2).GetChild(0).GetComponent<InputField>().text;
+                    } else if (code.transform.GetChild(3).name == "BtnVariable==(Clone)") {
+                        if (string.IsNullOrEmpty(code.transform.GetChild(3).GetChild(1).GetComponent<InputField>().text)) {
+                            code.transform.GetChild(3).GetChild(1).GetComponent<InputField>().text = "2";
+                        }
+                        if (string.IsNullOrEmpty(code.transform.GetChild(3).GetChild(0).GetComponent<InputField>().text)) {
+                            code.transform.GetChild(3).GetChild(0).GetComponent<InputField>().text = "a";
+                            tempName = "a";
+                        }
+                        tempName = code.transform.GetChild(3).GetChild(0).GetComponent<InputField>().text;
+                    }
+                    
+                    if (tempName != null) {
+                        for (int k = 0; k < varName.Count; k++) {
+                            if (tempName == varName[k]) {
+                                isExist = true;
+                                break;
+                            }
+                        }
+                        if (isExist == false) {
+                            AlertError(0);
+                            codesQueue.Clear();
+                            ResetView();
+                            return;
+                        }
+                    } else {
+                        if (cnt == -1) {
+                            AlertError(0);
+                            codesQueue.Clear();
+                            ResetView();
+                            return;
+                        }
+                    }
                 }
+
                 if (code.name == "BtnEndIf(Clone)") {
                     endIfIndex.Add(functions.Count - 1);
+                }
+
+                if (code.name == "BtnVariable=(Clone)") {
+                    bool isExist = false;
+                    for (int j = 0; j < varName.Count; j++) {
+                        if (varName[j] == code.transform.GetChild(0).GetComponent<InputField>().text) {
+                            isExist = true;
+                            break;
+                        }
+                    }
+                    if (isExist == false) {
+                        if (string.IsNullOrEmpty(code.transform.GetChild(0).GetComponent<InputField>().text)) {
+                            code.transform.GetChild(0).GetComponent<InputField>().text = "a";
+                        }
+                        if (string.IsNullOrEmpty(code.transform.GetChild(1).GetComponent<InputField>().text)) {
+                            code.transform.GetChild(1).GetComponent<InputField>().text = "2";
+                        }
+                        varName.Add(code.transform.GetChild(0).GetComponent<InputField>().text);
+                        varValue.Add(int.Parse(code.transform.GetChild(1).GetComponent<InputField>().text));
+                    }
+                }
+                if (code.name == "BtnVariable++(Clone)") {
+                    if (string.IsNullOrEmpty(code.transform.GetChild(0).GetComponent<InputField>().text)) {
+                        code.transform.GetChild(0).GetComponent<InputField>().text = "a";
+                    }
+
+                    bool isExist = false;
+                    for (int j = 0; j < varName.Count; j++) {
+                        if (varName[j] == code.transform.GetChild(0).GetComponent<InputField>().text) {
+                            isExist = true;
+                            break;
+                        }
+                    }
+                    if (isExist == false) {
+                        AlertError(0);
+                        codesQueue.Clear();
+                        ResetView();
+                        return;
+                    }
+                }
+                if (code.name == "BtnCnt=(Clone)") {
+                    if (string.IsNullOrEmpty(code.transform.GetChild(0).GetComponent<InputField>().text)) {
+                        code.transform.GetChild(0).GetComponent<InputField>().text = "2";
+                    }
+                    cnt = int.Parse(code.transform.GetChild(0).GetComponent<InputField>().text);
+                }
+                if (code.name == "BtnCnt++(Clone)") {
+                    if (cnt == -1) {
+                        AlertError(0);
+                        codesQueue.Clear();
+                        ResetView();
+                        return;
+                    }
+                }
+                if (code.name == "BtnDelay(Clone)") {
+                    if(string.IsNullOrEmpty(code.transform.GetChild(0).GetComponent<InputField>().text)) {
+                        code.transform.GetChild(0).GetComponent<InputField>().text = "2";
+                    }
                 }
 
                 if (code.transform.childCount < 2 && 
@@ -142,21 +265,27 @@ public class Compiler : MonoBehaviour
                     break;
                 } else if (code.transform.childCount < 3 &&
                     (code.name == "BtnDelay(Clone)" ||
-                    code.name == "BtnCnt=(Clone)")) {
+                    code.name == "BtnCnt=(Clone)" ||
+                    code.name == "BtnVariable++(Clone)")) {
                     break;
                 } else if (code.transform.childCount < 4 &&
-                    code.name == "BtnIf(Clone)") {
+                    (code.name == "BtnIf(Clone)" ||
+                    code.name == "BtnVariable=(Clone)")) {
                     break;
                 }
 
-                if (code.name == "BtnIf(Clone)") {
-                    if (code.transform.GetChild(2).CompareTag("child")) {
-                        code = code.transform.GetChild(2).gameObject;
-                    } else {
+                if (code.name == "BtnVariable=(Clone)") {
+                    code = code.transform.GetChild(3).gameObject;
+                } else if (code.name == "BtnIf(Clone)") {
+                    if (code.transform.GetChild(2).name == "BtnCount(Clone)" ||
+                        code.transform.GetChild(2).name == "BtnVariable==(Clone)") {
                         code = code.transform.GetChild(3).gameObject;
+                    } else {
+                        code = code.transform.GetChild(2).gameObject;
                     }
                 } else if (code.name == "BtnDelay(Clone)" ||
-                    code.name == "BtnCnt=(Clone)") {
+                    code.name == "BtnCnt=(Clone)" ||
+                    code.name == "BtnVariable++(Clone)") {
                     code = code.transform.GetChild(2).gameObject;
                 } else {
                     code = code.transform.GetChild(1).gameObject;
@@ -166,10 +295,12 @@ public class Compiler : MonoBehaviour
 
         if (loopIndex.Count != endLoopIndex.Count) {
             AlertError(1);
+            ResetView();
             codesQueue.Clear();
             isCompiled = false;
         } else if (ifIndex.Count != endIfIndex.Count) {
             AlertError(2);
+            ResetView();
             codesQueue.Clear();
             isCompiled = false;
         } else {
@@ -178,7 +309,7 @@ public class Compiler : MonoBehaviour
         }
     }
 
-    public void functionMove() {
+    public void FunctionMove() {
         if (player.GetComponent<SpriteRenderer>().flipX == false) {
             //player.transform.position += Vector3.right * 0.3f;
             player.AddForce(Vector2.right*2, ForceMode2D.Impulse);
@@ -189,12 +320,12 @@ public class Compiler : MonoBehaviour
         delayTime = 30;
     }
 
-    public void functionJump() {
+    public void FunctionJump() {
         player.AddForce(Vector2.up * 3, ForceMode2D.Impulse);
         delayTime = 30;
     }
 
-    public void functionRotate() {
+    public void FunctionRotate() {
         if (player.GetComponent<SpriteRenderer>().flipX == false) {
             player.GetComponent<SpriteRenderer>().flipX = true;
         } else {
@@ -203,11 +334,11 @@ public class Compiler : MonoBehaviour
         delayTime = 30;
     }
 
-    public void functionLoop() {
+    public void FunctionLoop() {
         delayTime = 1;
     }
 
-    public void functionEndLoop() {
+    public void FunctionEndLoop() {
         for (int i = 0; i < endLoopIndex.Count; i++) {
             if (currentIndex == endLoopIndex[i]) {
                 currentIndex = loopIndex[loopIndex.Count - 1 - i] - 1;
@@ -217,10 +348,11 @@ public class Compiler : MonoBehaviour
         delayTime = 1;
     }
 
-    public void functionDelay() {
+    public void FunctionDelay() {
         string n = functions[currentIndex].transform.GetChild(0).GetComponent<InputField>().text;
         float temp;
         if (string.IsNullOrEmpty(n)) {
+            functions[currentIndex].transform.GetChild(0).GetComponent<InputField>().text = "2";
             temp = 2;
         } else {
             temp = float.Parse(n);
@@ -233,25 +365,43 @@ public class Compiler : MonoBehaviour
         }
     }
 
-    public void functionIf() {
+    public void FunctionIf() {
+        string tempName = null;
+        bool conditionFalse = false;
+        bool isExist = false;
         if (functions[currentIndex].transform.GetChild(2).name == "BtnCount(Clone)") {
-            if (string.IsNullOrEmpty(functions[currentIndex].transform.GetChild(2).GetChild(0).GetComponent<InputField>().text)) {
-                conditionCnt = 2;
-            } else {
-                conditionCnt = int.Parse(functions[currentIndex].transform.GetChild(2).GetChild(0).GetComponent<InputField>().text);
+            conditionCnt = int.Parse(functions[currentIndex].transform.GetChild(2).GetChild(0).GetComponent<InputField>().text);
+            
+        } else if (functions[currentIndex].transform.GetChild(3).name == "BtnCount(Clone)") {
+            conditionCnt = int.Parse(functions[currentIndex].transform.GetChild(3).GetChild(0).GetComponent<InputField>().text);
+        }
+
+        if (functions[currentIndex].transform.GetChild(2).name == "BtnVariable==(Clone)") {
+            tempName = functions[currentIndex].transform.GetChild(2).GetChild(0).GetComponent<InputField>().text;
+            conditionCnt = int.Parse(functions[currentIndex].transform.GetChild(2).GetChild(1).GetComponent<InputField>().text);
+            
+        } else if (functions[currentIndex].transform.GetChild(3).name == "BtnVariable==(Clone)") {
+            tempName = functions[currentIndex].transform.GetChild(3).GetChild(0).GetComponent<InputField>().text;
+            conditionCnt = int.Parse(functions[currentIndex].transform.GetChild(3).GetChild(1).GetComponent<InputField>().text);
+        }
+
+        if (tempName != null) {
+            for (int i = 0; i < varName.Count; i++) {
+                if (tempName == varName[i]) {
+                    isExist = true;
+                    if (varValue[i] != conditionCnt) {
+                        conditionFalse = true;
+                    }
+                    break;
+                }
             }
         } else {
-            if (string.IsNullOrEmpty(functions[currentIndex].transform.GetChild(3).GetChild(0).GetComponent<InputField>().text)) {
-                conditionCnt = 2;
-            } else {
-                conditionCnt = int.Parse(functions[currentIndex].transform.GetChild(3).GetChild(0).GetComponent<InputField>().text);
+            if (cnt != conditionCnt) {
+                conditionFalse = true;
             }
         }
 
-        if (cnt == -1) {
-            AlertError(0);
-        }
-        if (cnt != conditionCnt) {
+        if (conditionFalse == true) {
             for (int i = 0; i < ifIndex.Count; i++) {
                 if (currentIndex == ifIndex[i]) {
                     currentIndex = endIfIndex[0 + i] - 1;
@@ -259,36 +409,48 @@ public class Compiler : MonoBehaviour
                 }
             }
         }
+        
         delayTime = 1;
     }
 
-    public void functionEndIf() {
+    public void FunctionEndIf() {
         delayTime = 1;
     }
 
-    public void functionSetCnt() {
-        int tempCnt;
-        if (string.IsNullOrEmpty(functions[currentIndex].transform.GetChild(0).GetComponent<InputField>().text)) {
-            tempCnt = 2;
-        } else {
-            tempCnt = int.Parse(functions[currentIndex].transform.GetChild(0).GetComponent<InputField>().text);
-        }
-        cnt = tempCnt;
+    public void FunctionSetCnt() {
+        cnt = int.Parse(functions[currentIndex].transform.GetChild(0).GetComponent<InputField>().text);
         delayTime = 1;
     }
 
-    public void functionIncreaseCnt() {
-        if (cnt == -1) {
-            AlertError(0);
-        }
+    public void FunctionIncreaseCnt() {
         cnt++;
         delayTime = 1;
     }
 
-    public void functionBreak() {
+    public void FunctionBreak() {
         for (int i = 0; i < endLoopIndex.Count; i++) {
             if (currentIndex < endLoopIndex[i]) {
                 currentIndex = endLoopIndex[i];
+                break;
+            }
+        }
+        delayTime = 1;
+    }
+
+    public void FunctionSetVariable() {
+        for (int i = 0; i < varName.Count; i++) {
+            if (functions[currentIndex].transform.GetChild(0).GetComponent<InputField>().text == varName[i]) {
+                varValue[i] = int.Parse(functions[currentIndex].transform.GetChild(1).GetComponent<InputField>().text);
+                break;
+            }
+        }
+        delayTime = 1;
+    }
+
+    public void FunctionIncreaseValue() {
+        for (int i = 0; i < varName.Count; i++) {
+            if (functions[currentIndex].transform.GetChild(0).GetComponent<InputField>().text == varName[i]) {
+                varValue[i]++;
                 break;
             }
         }
