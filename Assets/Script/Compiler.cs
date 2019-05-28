@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Compiler : MonoBehaviour
 {
     private List<GameObject> functions = new List<GameObject>();
+    private List<int> loopSet = new List<int>();
     private List<int> loopIndex = new List<int>();
     private List<int> endLoopIndex = new List<int>();
     private List<int> ifIndex = new List<int>();
@@ -23,6 +24,8 @@ public class Compiler : MonoBehaviour
     private int cnt = -1;
     private int conditionCnt = -1;
 
+    private int loopCnt = 0;
+
     private void Start() {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody2D>();
     }
@@ -33,37 +36,44 @@ public class Compiler : MonoBehaviour
         frameCount++;
         if(frameCount % delayTime == 0) {
             if (isCompiled == true && currentIndex < functions.Count) {
-                Debug.Log(currentIndex);
                 if (functions[currentIndex].name == "BtnMove(Clone)") {
-                    //Debug.Log(functions[currentIndex].name);
+                    Debug.Log("Code index " + currentIndex + " : " + functions[currentIndex].name);
                     FunctionMove();
                 } else if (functions[currentIndex].name == "BtnJump(Clone)") {
-                    //Debug.Log(functions[currentIndex].name);
+                    Debug.Log("Code index " + currentIndex + " : " + functions[currentIndex].name);
                     FunctionJump();
                 } else if (functions[currentIndex].name == "BtnRotate(Clone)") {
-                    //Debug.Log(functions[currentIndex].name);
+                    Debug.Log("Code index " + currentIndex + " : " + functions[currentIndex].name);
                     FunctionRotate();
                 } else if (functions[currentIndex].name == "BtnLoop(Clone)") {
-                    //Debug.Log(functions[currentIndex].name);
+                    Debug.Log("Code index " + currentIndex + " : " + functions[currentIndex].name);
                     FunctionLoop();
                 } else if (functions[currentIndex].name == "BtnEndLoop(Clone)") {
-                    //Debug.Log(functions[currentIndex].name);
+                    Debug.Log("Code index " + currentIndex + " : " + functions[currentIndex].name);
                     FunctionEndLoop();
                 } else if (functions[currentIndex].name == "BtnDelay(Clone)") {
+                    Debug.Log("Code index " + currentIndex + " : " + functions[currentIndex].name);
                     FunctionDelay();
                 } else if (functions[currentIndex].name == "BtnIf(Clone)") {
+                    Debug.Log("Code index " + currentIndex + " : " + functions[currentIndex].name);
                     FunctionIf();
                 } else if (functions[currentIndex].name == "BtnEndIf(Clone)") {
+                    Debug.Log("Code index " + currentIndex + " : " + functions[currentIndex].name);
                     FunctionEndIf();
                 } else if (functions[currentIndex].name == "BtnCnt=(Clone)") {
+                    Debug.Log("Code index " + currentIndex + " : " + functions[currentIndex].name);
                     FunctionSetCnt();
                 } else if (functions[currentIndex].name == "BtnCnt++(Clone)") {
+                    Debug.Log("Code index " + currentIndex + " : " + functions[currentIndex].name);
                     FunctionIncreaseCnt();
                 } else if (functions[currentIndex].name == "BtnBreak(Clone)") {
+                    Debug.Log("Code index " + currentIndex + " : " + functions[currentIndex].name);
                     FunctionBreak();
                 } else if (functions[currentIndex].name == "BtnVariable=(Clone)") {
+                    Debug.Log("Code index " + currentIndex + " : " + functions[currentIndex].name);
                     FunctionSetVariable();
                 } else if (functions[currentIndex].name == "BtnVariable++(Clone)") {
+                    Debug.Log("Code index " + currentIndex + " : " + functions[currentIndex].name);
                     FunctionIncreaseValue();
                 }
 
@@ -82,6 +92,7 @@ public class Compiler : MonoBehaviour
                 varName.Clear();
                 varValue.Clear();
                 functions.Clear();
+                loopSet.Clear();
             }
         }
         
@@ -100,6 +111,7 @@ public class Compiler : MonoBehaviour
         endIfIndex.Clear();
         varName.Clear();
         varValue.Clear();
+        loopSet.Clear();
         player.transform.position = new Vector2(0, 0);
         player.GetComponent<SpriteRenderer>().flipX = false;
     }
@@ -126,11 +138,14 @@ public class Compiler : MonoBehaviour
             }
         }
 
+        loopCnt = 0;
+
         for (int i = 0; i < codesQueue.Count; i++) {
             code = codesQueue[i];
             while (true) {
 
                 functions.Add(code);
+                loopCnt++;
 
                 if (code.name == "BtnLoop(Clone)") {
                     loopIndex.Add(functions.Count - 1);
@@ -202,6 +217,14 @@ public class Compiler : MonoBehaviour
 
                 if (code.name == "BtnVariable=(Clone)") {
                     bool isExist = false;
+
+                    if (string.IsNullOrEmpty(code.transform.GetChild(0).GetComponent<InputField>().text)) {
+                        code.transform.GetChild(0).GetComponent<InputField>().text = "a";
+                    }
+                    if (string.IsNullOrEmpty(code.transform.GetChild(1).GetComponent<InputField>().text)) {
+                        code.transform.GetChild(1).GetComponent<InputField>().text = "2";
+                    }
+
                     for (int j = 0; j < varName.Count; j++) {
                         if (varName[j] == code.transform.GetChild(0).GetComponent<InputField>().text) {
                             isExist = true;
@@ -209,12 +232,6 @@ public class Compiler : MonoBehaviour
                         }
                     }
                     if (isExist == false) {
-                        if (string.IsNullOrEmpty(code.transform.GetChild(0).GetComponent<InputField>().text)) {
-                            code.transform.GetChild(0).GetComponent<InputField>().text = "a";
-                        }
-                        if (string.IsNullOrEmpty(code.transform.GetChild(1).GetComponent<InputField>().text)) {
-                            code.transform.GetChild(1).GetComponent<InputField>().text = "2";
-                        }
                         varName.Add(code.transform.GetChild(0).GetComponent<InputField>().text);
                         varValue.Add(int.Parse(code.transform.GetChild(1).GetComponent<InputField>().text));
                     }
@@ -335,16 +352,30 @@ public class Compiler : MonoBehaviour
     }
 
     public void FunctionLoop() {
+        loopSet.Add(currentIndex - 1);
         delayTime = 1;
     }
 
     public void FunctionEndLoop() {
-        for (int i = 0; i < endLoopIndex.Count; i++) {
-            if (currentIndex == endLoopIndex[i]) {
-                currentIndex = loopIndex[loopIndex.Count - 1 - i] - 1;
-                break;
-            }
+        if (loopSet.Count == 0) {
+            currentIndex++;
+            delayTime = 1;
+            return;
         }
+        currentIndex = loopSet[loopSet.Count - 1];
+        loopSet.RemoveAt(loopSet.Count - 1);
+        //for (int i = 0; i < endLoopIndex.Count; i++) {
+        //    if (currentIndex == endLoopIndex[i]) {
+        //        for (int j = 0; j < loopIndex.Count; j++) {
+        //            if (loopIndex[j] > endLoopIndex[i]) {
+        //                currentIndex = loopIndex[j - 1 - i] - 1;
+        //            }
+        //            break;
+        //        }
+        //        //currentIndex = loopIndex[loopIndex.Count - 1 - i] - 1;
+        //        break;
+        //    }
+        //}
         delayTime = 1;
     }
 
@@ -368,7 +399,7 @@ public class Compiler : MonoBehaviour
     public void FunctionIf() {
         string tempName = null;
         bool conditionFalse = false;
-        bool isExist = false;
+
         if (functions[currentIndex].transform.GetChild(2).name == "BtnCount(Clone)") {
             conditionCnt = int.Parse(functions[currentIndex].transform.GetChild(2).GetChild(0).GetComponent<InputField>().text);
             
@@ -388,7 +419,6 @@ public class Compiler : MonoBehaviour
         if (tempName != null) {
             for (int i = 0; i < varName.Count; i++) {
                 if (tempName == varName[i]) {
-                    isExist = true;
                     if (varValue[i] != conditionCnt) {
                         conditionFalse = true;
                     }
@@ -431,6 +461,7 @@ public class Compiler : MonoBehaviour
         for (int i = 0; i < endLoopIndex.Count; i++) {
             if (currentIndex < endLoopIndex[i]) {
                 currentIndex = endLoopIndex[i];
+                loopSet.RemoveAt(loopSet.Count - 1);
                 break;
             }
         }
@@ -441,6 +472,7 @@ public class Compiler : MonoBehaviour
         for (int i = 0; i < varName.Count; i++) {
             if (functions[currentIndex].transform.GetChild(0).GetComponent<InputField>().text == varName[i]) {
                 varValue[i] = int.Parse(functions[currentIndex].transform.GetChild(1).GetComponent<InputField>().text);
+                Debug.Log("Info : " + varName[i] + "=" + varValue[i]);
                 break;
             }
         }
@@ -451,6 +483,7 @@ public class Compiler : MonoBehaviour
         for (int i = 0; i < varName.Count; i++) {
             if (functions[currentIndex].transform.GetChild(0).GetComponent<InputField>().text == varName[i]) {
                 varValue[i]++;
+                Debug.Log("Info : " + varName[i] + "=" + varValue[i]);
                 break;
             }
         }
