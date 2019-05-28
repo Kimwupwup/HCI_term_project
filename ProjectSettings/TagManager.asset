@@ -21,6 +21,7 @@ TagManager:
   - errorMessageBox0
   - errorMessageBox1
   - errorMessageBox2
+  - settingPanel
   layers:
   - Default
   - TransparentFX
