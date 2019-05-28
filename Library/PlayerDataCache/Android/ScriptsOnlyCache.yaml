@@ -5,6 +5,7 @@ ScriptsOnlyBuild:
     - Controller
     - DragDrop
     - MenuButton
+    - SetColor
     - Shadow
     - TriggerChildBlock
     - TriggerCodePanel
@@ -89,6 +90,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 10568}
     - Class: 114
       Script: {instanceID: 10584}
+    - Class: 114
+      Script: {instanceID: 13066}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -784,7 +787,13 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
+  - hash:
+      serializedVersion: 2
+      Hash: 2cf7d60712de35085d69ef22aff5a558
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: SetColor
   platform: 13
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: E:/GitHub/HCI_term_project/test.apk
+  playerPath: D:/git/HCI_term_project/test.apk

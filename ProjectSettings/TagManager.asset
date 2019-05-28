@@ -22,6 +22,9 @@ TagManager:
   - errorMessageBox1
   - errorMessageBox2
   - settingPanel
+  - viewColor
+  - codeColor
+  - exitPanel
   layers:
   - Default
   - TransparentFX

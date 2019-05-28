@@ -10,6 +10,8 @@ public class MenuButton : MonoBehaviour
     private GameObject codePanel;
     private GameObject pausePanel;
     private GameObject errorPanel;
+    private GameObject settingPanel;
+    private GameObject exitPanel;
 
     private float movePosition;
     private float prevPosition;
@@ -28,9 +30,12 @@ public class MenuButton : MonoBehaviour
     void Awake() {
         errorPanel = GameObject.FindGameObjectWithTag("errorPanel");
         pausePanel = GameObject.FindGameObjectWithTag("pausePanel");
+        settingPanel = GameObject.FindGameObjectWithTag("settingPanel");
+        exitPanel = GameObject.FindGameObjectWithTag("exitPanel");
+
         posPausePanel = pausePanel.transform.position;
         posErrorPanel = errorPanel.transform.position;
-        pausePanel.SetActive(false);
+        //pausePanel.SetActive(false);
     }
 
     void Start() {
@@ -158,17 +163,35 @@ public class MenuButton : MonoBehaviour
     }
 
     public void IsExit() {
+        exitPanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+        pausePanel.GetComponent<RectTransform>().position = posPausePanel;
+    }
+
+    public void CancelExit() {
+        exitPanel.GetComponent<RectTransform>().position = posPausePanel;
+    }
+
+    public void IsSetting() {
+        settingPanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+        pausePanel.GetComponent<RectTransform>().position = posPausePanel;
+    }
+
+    public void CancelSetting() {
+        settingPanel.GetComponent<RectTransform>().position = posPausePanel;
+    }
+
+    public void IsPause() {
         pausePanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
-        pausePanel.SetActive(true);
+        //pausePanel.SetActive(true);
     }
 
     public void ConfirmExit() {
         Application.Quit();
     }
 
-    public void CancelExit() {
+    public void CancelPause() {
         pausePanel.GetComponent<RectTransform>().position = posPausePanel;
-        pausePanel.SetActive(false);
+        //pausePanel.SetActive(false);
     }
 
     public void ResetErrorMessage() {
