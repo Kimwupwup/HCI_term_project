@@ -95,8 +95,18 @@ public class MenuButton : MonoBehaviour
                 new Vector3(0, -8.33f, 0), Time.deltaTime * speed);
         }
         if (Input.GetKeyDown(KeyCode.Escape)) {
-            pausePanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
-            pausePanel.SetActive(true);
+            if (pausePanel.GetComponent<RectTransform>().anchoredPosition == Vector2.zero) {
+                pausePanel.GetComponent<RectTransform>().position = posPausePanel;
+            } else {
+                pausePanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+                settingPanel.GetComponent<RectTransform>().position = posPausePanel;
+                exitPanel.GetComponent<RectTransform>().position = posPausePanel;
+                GameObject.FindGameObjectWithTag("viewColor").GetComponent<SetColor>().ResetValue();
+                GameObject.FindGameObjectWithTag("codeColor").GetComponent<SetColor>().ResetValue();
+
+            }
+
+            //pausePanel.SetActive(true);
         }
     }
 
@@ -178,6 +188,8 @@ public class MenuButton : MonoBehaviour
 
     public void CancelSetting() {
         settingPanel.GetComponent<RectTransform>().position = posPausePanel;
+        GameObject.FindGameObjectWithTag("viewColor").GetComponent<SetColor>().ResetValue();
+        GameObject.FindGameObjectWithTag("codeColor").GetComponent<SetColor>().ResetValue();
     }
 
     public void IsPause() {
