@@ -155,7 +155,11 @@ public class Compiler : MonoBehaviour
                 }
                 if (code.name == "BtnIf(Clone)") {
                     ifIndex.Add(functions.Count - 1);
-
+                    if (code.transform.childCount < 4) {
+                        AlertError(2);
+                        ResetView();
+                        return;
+                    }
                     string tempName = null;
                     bool isExist = false;
 
