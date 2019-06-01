@@ -61,6 +61,7 @@
     <Compile Include="Assets\Script\Controller.cs" />
     <Compile Include="Assets\Script\DragDrop.cs" />
     <Compile Include="Assets\Script\MenuButton.cs" />
+    <Compile Include="Assets\Script\NextScene.cs" />
     <Compile Include="Assets\Script\SetColor.cs" />
     <Compile Include="Assets\Script\Shadow.cs" />
     <Compile Include="Assets\Script\TriggerChildBlock.cs" />
