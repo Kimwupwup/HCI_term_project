@@ -18,7 +18,7 @@ public class SetColor : MonoBehaviour {
 
     private bool isAwake = true;
 
-    void Start() {
+    void Awake() {
         isAwake = true;
         textR = colorR.transform.GetChild(0).GetComponent<InputField>();
         textG = colorG.transform.GetChild(0).GetComponent<InputField>();
@@ -88,15 +88,15 @@ public class SetColor : MonoBehaviour {
 
     public void ResetValue() {
         if (this.CompareTag("viewColor")) {
-            textR.text = (objBackground.GetComponent<Camera>().backgroundColor.r * 256).ToString();
-            textG.text = (objBackground.GetComponent<Camera>().backgroundColor.g * 256).ToString();
-            textB.text = (objBackground.GetComponent<Camera>().backgroundColor.b * 256).ToString();
+            textR.text = Mathf.Round(objBackground.GetComponent<Camera>().backgroundColor.r * 256).ToString();
+            textG.text = Mathf.Round(objBackground.GetComponent<Camera>().backgroundColor.g * 256).ToString();
+            textB.text = Mathf.Round(objBackground.GetComponent<Camera>().backgroundColor.b * 256).ToString();
             preview.GetComponent<Image>().color = objBackground.GetComponent<Camera>().backgroundColor;
 
         } else if (this.CompareTag("codeColor")) {
-            textR.text = (objBackground.GetComponent<Image>().color.r * 256).ToString();
-            textG.text = (objBackground.GetComponent<Image>().color.g * 256).ToString();
-            textB.text = (objBackground.GetComponent<Image>().color.b * 256).ToString();
+            textR.text = Mathf.Round(objBackground.GetComponent<Image>().color.r * 256).ToString();
+            textG.text = Mathf.Round(objBackground.GetComponent<Image>().color.g * 256).ToString();
+            textB.text = Mathf.Round(objBackground.GetComponent<Image>().color.b * 256).ToString();
             preview.transform.parent.GetComponent<Image>().color = cameraBackground.GetComponent<Camera>().backgroundColor;
             preview.GetComponent<Image>().color = objBackground.GetComponent<Image>().color;
         }

@@ -52,14 +52,14 @@ public class MenuButton : MonoBehaviour
 
         // 메뉴창 켜기
         if (isSetMenu == true) {
-            menuPanel.transform.position = Vector2.Lerp(menuPanel.transform.position, new Vector2(menuPanelWidth / 2 * Screen.height / 2960f, menuPanel.transform.position.y), Time.deltaTime * speed);
+            menuPanel.transform.position = Vector2.Lerp(menuPanel.transform.position, new Vector2((menuPanelWidth / 2) * Screen.height / 2960f, menuPanel.transform.position.y), Time.deltaTime * speed);
 
             //menuPanel.transform.position = Vector2.Lerp(menuPanel.transform.position, new Vector2(menuPanelWidth / 2, menuPanel.transform.position.y), Time.deltaTime * speed);
         }
 
         // 메뉴창 끄기
         if (isSetMenu == false) {
-            menuPanel.transform.position = Vector2.Lerp(menuPanel.transform.position, new Vector2(-menuPanelWidth / 2 * Screen.height / 2960f, menuPanel.transform.position.y), Time.deltaTime * speed);
+            menuPanel.transform.position = Vector2.Lerp(menuPanel.transform.position, new Vector2(-(menuPanelWidth / 2/* + 60*/) * Screen.height / 2960f, menuPanel.transform.position.y), Time.deltaTime * speed);
 
             //menuPanel.transform.position = Vector2.Lerp(menuPanel.transform.position, new Vector2(-menuPanelWidth / 2, menuPanel.transform.position.y), Time.deltaTime * speed);
         }
