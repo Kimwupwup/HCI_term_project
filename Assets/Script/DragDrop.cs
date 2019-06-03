@@ -18,11 +18,10 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
 
     public void OnBeginDrag(PointerEventData eventData) {
         if (this.CompareTag("button") == true) {
-            tmpButton = Instantiate(this, Input.mousePosition, Quaternion.identity).gameObject;
-            tmpButton.tag = "clone";
-            tmpButton.transform.SetParent(GameObject.FindGameObjectWithTag("canvas").transform);
-            tmpButton.GetComponent<Image>().raycastTarget = false;
 
+            tmpButton = Instantiate(this, Input.mousePosition, Quaternion.identity, GameObject.FindGameObjectWithTag("canvas").transform).gameObject;
+            tmpButton.tag = "clone";
+            tmpButton.GetComponent<Image>().raycastTarget = false;
         } else {
             tmpButton = this.gameObject;
 
@@ -92,7 +91,7 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
                 temp = objTarget.GetComponent<RectTransform>().rect.width - temp;
 
                 tmpButton.transform.position =
-                    new Vector3(objTarget.transform.position.x - (temp / 2),
+                    new Vector3(objTarget.transform.position.x - (temp / 2) * Screen.height / 2960f,
                     objTarget.transform.position.y + 10, 0);
 
                 tmpButton.transform.SetParent(objTarget.transform.parent);
@@ -108,7 +107,7 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
                 temp = objTarget.GetComponent<RectTransform>().rect.width - temp;
 
                 tmpButton.transform.position =
-                    new Vector3(objTarget.transform.position.x - (temp / 2),
+                    new Vector3(objTarget.transform.position.x - (temp / 2) * Screen.height / 2960f,
                     objTarget.transform.position.y, 0);
 
                 tmpButton.transform.SetParent(objTarget.transform.parent);

@@ -18,6 +18,7 @@ public class MenuButton : MonoBehaviour
 
     private Vector3 posPausePanel;
     private Vector3 posErrorPanel;
+    private Vector3 posMenuPanel;
 
     private float menuPanelWidth;
     private float codePanelHeight;
@@ -32,16 +33,18 @@ public class MenuButton : MonoBehaviour
         pausePanel = GameObject.FindGameObjectWithTag("pausePanel");
         settingPanel = GameObject.FindGameObjectWithTag("settingPanel");
         exitPanel = GameObject.FindGameObjectWithTag("exitPanel");
+        menuPanel = GameObject.FindGameObjectWithTag("menuPanel");
+        codePanel = GameObject.FindGameObjectWithTag("codePanel");
 
+        posMenuPanel = menuPanel.transform.position;
         posPausePanel = pausePanel.transform.position;
         posErrorPanel = errorPanel.transform.position;
+
         //pausePanel.SetActive(false);
     }
 
     void Start() {
-        menuPanel = GameObject.FindGameObjectWithTag("menuPanel");
-        codePanel = GameObject.FindGameObjectWithTag("codePanel");
-
+        
         menuPanelWidth = menuPanel.GetComponent<RectTransform>().sizeDelta.x;
         codePanelHeight = codePanel.GetComponent<RectTransform>().sizeDelta.y;
     }
@@ -49,29 +52,33 @@ public class MenuButton : MonoBehaviour
 
         // 메뉴창 켜기
         if (isSetMenu == true) {
-            menuPanel.transform.position = Vector2.Lerp(menuPanel.transform.position, new Vector2(menuPanelWidth / 2, menuPanel.transform.position.y), Time.deltaTime * speed);
+            menuPanel.transform.position = Vector2.Lerp(menuPanel.transform.position, new Vector2(menuPanelWidth / 2 * Screen.height / 2960f, menuPanel.transform.position.y), Time.deltaTime * speed);
+
+            //menuPanel.transform.position = Vector2.Lerp(menuPanel.transform.position, new Vector2(menuPanelWidth / 2, menuPanel.transform.position.y), Time.deltaTime * speed);
         }
 
         // 메뉴창 끄기
         if (isSetMenu == false) {
-            menuPanel.transform.position = Vector2.Lerp(menuPanel.transform.position, new Vector2(-menuPanelWidth / 2, menuPanel.transform.position.y), Time.deltaTime * speed);
+            menuPanel.transform.position = Vector2.Lerp(menuPanel.transform.position, new Vector2(-menuPanelWidth / 2 * Screen.height / 2960f, menuPanel.transform.position.y), Time.deltaTime * speed);
+
+            //menuPanel.transform.position = Vector2.Lerp(menuPanel.transform.position, new Vector2(-menuPanelWidth / 2, menuPanel.transform.position.y), Time.deltaTime * speed);
         }
 
         // 코드창 키우기(타이핑중일때)
         if (isSetCodePanel == true && isTyping == true) {
             codePanel.transform.position = Vector3.Lerp(codePanel.transform.position, 
-                new Vector2(codePanel.transform.position.x, 2960/2 - movePosition), 
+                new Vector2(codePanel.transform.position.x, Screen.height/2 - movePosition), 
                 Time.deltaTime * speed);
 
             GameObject.FindGameObjectWithTag("ground").transform.position =
                 Vector3.Lerp(GameObject.FindGameObjectWithTag("ground").transform.position,
-                new Vector3(0, -5 + (10 * ((2960 / 2 - movePosition) / 2960)), 0), Time.deltaTime * speed);
+                new Vector3(0, -5 + (10 * ((Screen.height / 2 - movePosition) / Screen.height)), 0), Time.deltaTime * speed);
         }
 
         // 코드창 키우기
         if (isSetCodePanel == true && isTyping == false) {
             codePanel.transform.position = Vector3.Lerp(codePanel.transform.position, 
-                new Vector2(codePanel.transform.position.x, codePanelHeight / 3), 
+                new Vector2(codePanel.transform.position.x, Screen.height / 3), 
                 Time.deltaTime * speed);
 
             GameObject.FindGameObjectWithTag("ground").transform.position =
@@ -89,7 +96,7 @@ public class MenuButton : MonoBehaviour
 
         // 뷰창 키우기
         if (isSetViewPanel == true) {
-            codePanel.transform.position = Vector3.Lerp(codePanel.transform.position, new Vector2(codePanel.transform.position.x, -codePanelHeight / 3), Time.deltaTime * speed);
+            codePanel.transform.position = Vector3.Lerp(codePanel.transform.position, new Vector2(codePanel.transform.position.x, -Screen.height / 3), Time.deltaTime * speed);
             GameObject.FindGameObjectWithTag("ground").transform.position =
                 Vector3.Lerp(GameObject.FindGameObjectWithTag("ground").transform.position,
                 new Vector3(0, -8.33f, 0), Time.deltaTime * speed);
