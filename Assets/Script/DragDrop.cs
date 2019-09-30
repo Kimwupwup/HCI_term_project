@@ -10,8 +10,10 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
     private GameObject objController;
     private Controller controller;
     private GameObject objTarget;
+    private MenuButton menuButton;
 
     public void Awake() {
+        menuButton = GameObject.FindGameObjectWithTag("menu_controller").GetComponent<MenuButton>();
         objController = GameObject.FindGameObjectWithTag("controller");
         controller = objController.GetComponent<Controller>();
     }
@@ -59,10 +61,16 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
 
     public void OnDrag(PointerEventData eventData) {
         tmpButton.transform.position = Input.mousePosition;
+
+        bool isTrue = controller.GetIsCodePanel();
+
+        if (isTrue) {
+            menuButton.SetMenuPanel(false);
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData) {
-
+        menuButton.SetMenuPanel(true);
         for (int i = 0; i < tmpButton.transform.childCount; i++) {
             tmpButton.transform.GetChild(i).gameObject.SetActive(true);
         }
@@ -91,7 +99,7 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
                 temp = objTarget.GetComponent<RectTransform>().rect.width - temp;
 
                 tmpButton.transform.position =
-                    new Vector3(objTarget.transform.position.x - (temp / 2) * Screen.height / 2960f,
+                    new Vector3(objTarget.transform.position.x - (temp / 2) * (Screen.height / 2960f) * 0.75f,
                     objTarget.transform.position.y + 10, 0);
 
                 tmpButton.transform.SetParent(objTarget.transform.parent);
@@ -107,7 +115,7 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
                 temp = objTarget.GetComponent<RectTransform>().rect.width - temp;
 
                 tmpButton.transform.position =
-                    new Vector3(objTarget.transform.position.x - (temp / 2) * Screen.height / 2960f,
+                    new Vector3(objTarget.transform.position.x - (temp / 2) * (Screen.height / 2960f) * 0.75f,
                     objTarget.transform.position.y, 0);
 
                 tmpButton.transform.SetParent(objTarget.transform.parent);

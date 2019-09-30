@@ -116,6 +116,9 @@ public class MenuButton : MonoBehaviour
             //pausePanel.SetActive(true);
         }
     }
+    public void SetMenuPanel(bool b) {
+        isSetMenu = b;
+    }
 
     public void ResetScreen() {
         if (prevPosition < 10) {

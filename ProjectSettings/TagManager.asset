@@ -25,6 +25,7 @@ TagManager:
   - viewColor
   - codeColor
   - exitPanel
+  - menu_controller
   layers:
   - Default
   - TransparentFX

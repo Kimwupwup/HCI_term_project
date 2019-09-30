@@ -862,4 +862,4 @@ ScriptsOnlyBuild:
   scenePathNames:
   - Assets/Scenes/intro.unity
   - Assets/Scenes/main.unity
-  playerPath: E:/GitHub/HCI_term_project/test3.apk
+  playerPath: D:/Git/HCI_term_project/test_modified.apk
