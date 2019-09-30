@@ -70,9 +70,9 @@ public class MenuButton : MonoBehaviour
                 new Vector2(codePanel.transform.position.x, Screen.height/2 - movePosition), 
                 Time.deltaTime * speed);
 
-            GameObject.FindGameObjectWithTag("ground").transform.position =
-                Vector3.Lerp(GameObject.FindGameObjectWithTag("ground").transform.position,
-                new Vector3(0, -5 + (10 * ((Screen.height / 2 - movePosition) / Screen.height)), 0), Time.deltaTime * speed);
+            //GameObject.FindGameObjectWithTag("ground").transform.position =
+            //    Vector3.Lerp(GameObject.FindGameObjectWithTag("ground").transform.position,
+            //    new Vector3(0, -5 + (10 * ((Screen.height / 2 - movePosition) / Screen.height)), 0), Time.deltaTime * speed);
         }
 
         // 코드창 키우기
@@ -81,25 +81,25 @@ public class MenuButton : MonoBehaviour
                 new Vector2(codePanel.transform.position.x, Screen.height / 3), 
                 Time.deltaTime * speed);
 
-            GameObject.FindGameObjectWithTag("ground").transform.position =
-                Vector3.Lerp(GameObject.FindGameObjectWithTag("ground").transform.position,
-                new Vector3(0, -1.67f, 0), Time.deltaTime * speed);
+            //GameObject.FindGameObjectWithTag("ground").transform.position =
+            //    Vector3.Lerp(GameObject.FindGameObjectWithTag("ground").transform.position,
+            //    new Vector3(0, -1.67f, 0), Time.deltaTime * speed);
         }
 
         // 초기 상태
         if (isSetCodePanel == false && isSetViewPanel == false) {
             codePanel.transform.position = Vector3.Lerp(codePanel.transform.position, new Vector2(codePanel.transform.position.x, 0), Time.deltaTime * speed);
-            GameObject.FindGameObjectWithTag("ground").transform.position =
-                Vector3.Lerp(GameObject.FindGameObjectWithTag("ground").transform.position,
-                new Vector3(0, -5, 0), Time.deltaTime * speed);
+            //GameObject.FindGameObjectWithTag("ground").transform.position =
+            //    Vector3.Lerp(GameObject.FindGameObjectWithTag("ground").transform.position,
+            //    new Vector3(0, -5, 0), Time.deltaTime * speed);
         }
 
         // 뷰창 키우기
         if (isSetViewPanel == true) {
             codePanel.transform.position = Vector3.Lerp(codePanel.transform.position, new Vector2(codePanel.transform.position.x, -Screen.height / 3), Time.deltaTime * speed);
-            GameObject.FindGameObjectWithTag("ground").transform.position =
-                Vector3.Lerp(GameObject.FindGameObjectWithTag("ground").transform.position,
-                new Vector3(0, -8.33f, 0), Time.deltaTime * speed);
+            //GameObject.FindGameObjectWithTag("ground").transform.position =
+            //    Vector3.Lerp(GameObject.FindGameObjectWithTag("ground").transform.position,
+            //    new Vector3(0, -8.33f, 0), Time.deltaTime * speed);
         }
         if (Input.GetKeyDown(KeyCode.Escape)) {
             if (pausePanel.GetComponent<RectTransform>().anchoredPosition == Vector2.zero) {
