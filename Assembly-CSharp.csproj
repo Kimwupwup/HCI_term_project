@@ -65,6 +65,7 @@
     <Compile Include="Assets\Script\Compiler.cs" />
     <Compile Include="Assets\Script\Controller.cs" />
     <Compile Include="Assets\Script\DragDrop.cs" />
+    <Compile Include="Assets\Script\follow_object.cs" />
     <Compile Include="Assets\Script\MenuButton.cs" />
     <Compile Include="Assets\Script\NextScene.cs" />
     <Compile Include="Assets\Script\Resolution.cs" />
