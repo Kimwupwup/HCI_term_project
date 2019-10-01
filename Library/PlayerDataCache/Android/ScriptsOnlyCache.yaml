@@ -11,11 +11,15 @@ ScriptsOnlyBuild:
     - Shadow
     - TriggerChildBlock
     - TriggerCodePanel
+    - follow_object
+    - slaim_move
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.TestListCacheData
@@ -65,7 +69,7 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 9384}
     - Class: 114
-      Script: {instanceID: 10060}
+      Script: {instanceID: 10064}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 157
@@ -95,7 +99,13 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 61
       Script: {instanceID: 0}
+    - Class: 74
+      Script: {instanceID: 0}
     - Class: 81
+      Script: {instanceID: 0}
+    - Class: 91
+      Script: {instanceID: 0}
+    - Class: 95
       Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}
@@ -134,17 +144,21 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 9658}
     - Class: 114
-      Script: {instanceID: 10080}
+      Script: {instanceID: 9678}
     - Class: 114
-      Script: {instanceID: 10196}
+      Script: {instanceID: 9726}
     - Class: 114
-      Script: {instanceID: 10550}
+      Script: {instanceID: 10084}
     - Class: 114
-      Script: {instanceID: 10566}
+      Script: {instanceID: 10200}
     - Class: 114
-      Script: {instanceID: 10574}
+      Script: {instanceID: 10554}
     - Class: 114
-      Script: {instanceID: 10590}
+      Script: {instanceID: 10570}
+    - Class: 114
+      Script: {instanceID: 10578}
+    - Class: 114
+      Script: {instanceID: 10594}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -632,6 +646,12 @@ ScriptsOnlyBuild:
     className: Controller
   - hash:
       serializedVersion: 2
+      Hash: 971938fa9f5e8d83f52369dfb565eede
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: slaim_move
+  - hash:
+      serializedVersion: 2
       Hash: 303ad70ce203ad874efe2965d0fbcff9
     assemblyName: Unity.Analytics.Tracker.dll
     namespaceName: UnityEngine.Analytics
@@ -642,6 +662,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Analytics.Tracker.dll
     namespaceName: UnityEngine.Analytics
     className: AnalyticsTracker
+  - hash:
+      serializedVersion: 2
+      Hash: 055a962ca7da857b90ddca1a30696978
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: follow_object
   - hash:
       serializedVersion: 2
       Hash: 0fb27be807aa299702f28ad0bcad1f46
