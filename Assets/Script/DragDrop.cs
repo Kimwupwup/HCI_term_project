@@ -11,6 +11,7 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
     private Controller controller;
     private GameObject objTarget;
     private MenuButton menuButton;
+    private bool isSetMenu;
 
     public void Awake() {
         menuButton = GameObject.FindGameObjectWithTag("menu_controller").GetComponent<MenuButton>();
@@ -19,6 +20,7 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
     }
 
     public void OnBeginDrag(PointerEventData eventData) {
+        isSetMenu = menuButton.GetMenuPanel();
         if (this.CompareTag("button") == true) {
 
             tmpButton = Instantiate(this, Input.mousePosition, Quaternion.identity, GameObject.FindGameObjectWithTag("canvas").transform).gameObject;
@@ -61,7 +63,7 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
 
     public void OnDrag(PointerEventData eventData) {
         tmpButton.transform.position = Input.mousePosition;
-
+        
         bool isTrue = controller.GetIsCodePanel();
 
         if (isTrue) {
@@ -70,7 +72,9 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
     }
 
     public void OnEndDrag(PointerEventData eventData) {
-        menuButton.SetMenuPanel(true);
+        if (isSetMenu)
+            menuButton.SetMenuPanel(true);
+        
         for (int i = 0; i < tmpButton.transform.childCount; i++) {
             tmpButton.transform.GetChild(i).gameObject.SetActive(true);
         }

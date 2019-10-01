@@ -112,7 +112,8 @@ public class Compiler : MonoBehaviour
         varName.Clear();
         varValue.Clear();
         loopSet.Clear();
-        player.transform.position = new Vector2(0, 0);
+        player.velocity = new Vector2(0, 0);
+        player.transform.position = new Vector2(0, 2);
         player.GetComponent<SpriteRenderer>().flipX = false;
     }
 
@@ -338,12 +339,12 @@ public class Compiler : MonoBehaviour
             //player.transform.position += Vector3.left * 0.3f;
             player.AddForce(Vector2.left*2, ForceMode2D.Impulse);
         }
-        delayTime = 30;
+        delayTime = 1;
     }
 
     public void FunctionJump() {
         player.AddForce(Vector2.up * 3, ForceMode2D.Impulse);
-        delayTime = 30;
+        delayTime = 1;
     }
 
     public void FunctionRotate() {
@@ -352,7 +353,7 @@ public class Compiler : MonoBehaviour
         } else {
             player.GetComponent<SpriteRenderer>().flipX = false;
         }
-        delayTime = 30;
+        delayTime = 1;
     }
 
     public void FunctionLoop() {
