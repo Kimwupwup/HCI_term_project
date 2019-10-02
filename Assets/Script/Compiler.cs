@@ -119,6 +119,7 @@ public class Compiler : MonoBehaviour
 
     public void Compiling() {
         if (isCompiled == true) {
+            isCompiled = false;
             return;
         }
         GameObject code = GameObject.FindGameObjectWithTag("codePanel");
